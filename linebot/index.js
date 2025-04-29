@@ -4,7 +4,7 @@ const { askGemini } = require('./geminiService');
 const db = require('./db');
 require('dotenv').config();
 const cors = require('cors');
-
+const reviewService = require('./reviewService');
 const app = express();
 app.use(cors());
 
@@ -29,6 +29,23 @@ bot.on('message', async event => {
       console.log(`✅ เพิ่มผู้ใช้ใหม่: ${userId}`);
     }
 
+    // ✅ ตรวจสอบว่าผู้ใช้ส่งข้อความที่เป็นรีวิว
+    if (userMsg.startsWith('รีวิว')) {
+      const reviewText = userMsg.replace('รีวิว', '').trim();
+
+      if (reviewText.length === 0) {
+        await event.reply('กรุณาพิมพ์ข้อความรีวิวต่อจากคำว่า "รีวิว" ด้วยครับ');
+        return;
+      }
+
+      await reviewService.saveReview(lineUserId, reviewText);
+      console.log(`📝 บันทึกรีวิวจาก ${lineUserId}: ${reviewText}`);
+
+      await event.reply('ขอบคุณสำหรับรีวิวของคุณครับ 😊');
+      return;
+    }
+
+    // ✅ เก็บคำค้นหาปกติ
     await db.query('INSERT INTO search_history (user_id, keyword) VALUES (?, ?)', [userId, userMsg]);
     console.log(`🔍 คำค้นหา: "${userMsg}" จาก ${userId}`);
 
@@ -52,6 +69,17 @@ app.get('/search-history', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.post('/api/reviews', async (req, res) => {
+  const { line_user_id, review_text } = req.body;
+  await reviewService.saveReview(line_user_id, review_text);
+  res.json({ message: 'Review saved' });
+});
+
+app.get('/api/reviews', async (req, res) => {
+  const reviews = await reviewService.getAllReviews();
+  res.json(reviews);
 });
 
 const PORT = 3000;

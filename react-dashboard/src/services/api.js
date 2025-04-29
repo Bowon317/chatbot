@@ -11,3 +11,7 @@ export const fetchSearchHistory = async () => {
     return [];
   }
 };
+export const getReviews = async () => {
+  const res = await fetch(`${API_URL}/api/reviews`);
+  return res.json();
+};

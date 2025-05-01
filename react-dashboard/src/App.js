@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { fetchSearchHistory } from "./services/api";
-import SearchTable from "./components/SearchTable"; // ถูกต้องแล้ว
-import SearchChart from "./components/SearchChart"; // ถูกต้องแล้ว
-import ReviewTable from './components/ReviewTable'; // ถูกต้องแล้ว
 import Header from "./components/Header";   // ถูกต้องแล้ว
 import Footer from "./components/Footer";   // ถูกต้องแล้ว
 import Home from "./pages/Home";       // *** แก้ไข: "./pages/Home" ***

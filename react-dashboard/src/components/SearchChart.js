@@ -10,16 +10,18 @@ const SearchChart = ({ data }) => {
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl mb-4">📊 กราฟคำค้นหายอดนิยม</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData}>
-          <XAxis dataKey="keyword" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="count" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="container mt-5">
+      <h2 className="mb-4 text-center" style={{ color: '#000' }}>📊 กราฟคำค้นหายอดนิยม</h2> {/* สีเขียว LINE */}
+      <div className="card shadow-sm p-3">
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData}>
+            <XAxis dataKey="keyword" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#00c300" /> {/* สีเขียว LINE */}
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
